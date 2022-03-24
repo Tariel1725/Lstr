@@ -1,6 +1,6 @@
 <?php
 
-class character
+class characterAPI
 {
     public function createCharacter(){
 
