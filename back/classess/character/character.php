@@ -2,5 +2,7 @@
 
 class character
 {
+    public function createCharacter(){
 
+    }
 }
