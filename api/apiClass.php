@@ -1,5 +1,4 @@
 <?php
-require_once('back/model/ORM.php');
 require_once ('constants.php');
 class apiClass
 {
