@@ -1,0 +1,5 @@
+<?php
+DEFINE('DBNAME', '');
+DEFINE('SQLSERVER', '');
+DEFINE('DBUSER', '');
+DEFINE('DBPASSWORD', '');
