@@ -2,6 +2,8 @@
 
 require_once ('constants.php');
 require_once ('../../validator.php');
+require_once ('../../model/model.php');
+
 
 class characterController
 {
@@ -13,33 +15,23 @@ class characterController
     public $character;
 
     public function createCharacter(){
-        if ($this->characterName) {
-            characterModel::addCharacterToDB($this->characterName, $this->characterLVL);
-            return characterModel::$result;
-        }
-        else {
-            $this->character->result = false;
-            $this->character->statusCode = STATUS_ERROR_DATA;
-            $this->character->error = 'Отсутствуют необходимые данные';
-        }
-    }
-
-    public function updateCharacter(){
-        if ($this->characterID) {
+        if ($this->characterName && $this->characterClass) {
             setlocale(LC_ALL, "ru_RU.UTF-8");
             $validator = new validator($this->characterName);
             if (!$validator->error) {
                 if (!$validator->symbols && !$validator->number) {
                     if (intval($this->characterLVL)>0) {
-                        characterModel::updateCharacterFromDB($this->characterName, $this->characterLVL);
-                        return characterModel::$result;
+                        $character = new characterModel();
+                        $character->Name = $this->characterName;
+                        $this->characterID = $character->createCharacter($this->characterClass);
                     }
                     else {
                         $this->character->result = false;
                         $this->character->statusCode = STATUS_ERROR_LVL;
                         $this->character->error = 'Уровень персонажа не может быть ниже 1';
                     }
-                } else {
+                }
+                else {
                     $this->character->result = false;
                     $this->character->statusCode = STATUS_ERROR_NAME;
                     $this->character->error = 'Нельзя использовать цифры и спецсимволы в имени персонажа';
@@ -72,8 +64,9 @@ class characterController
 
     public function deleteCharacter() {
         if ($this->characterID) {
-            characterModel::deleteCharacterFromDB();
-            return characterModel::$result;
+            $character = new characterModel();
+            $character->ID = $this->characterID;
+            $character->deleteCharacter();
         }
         else {
             $this->character->result = false;
