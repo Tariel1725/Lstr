@@ -1,6 +1,7 @@
 <?php
 
 require_once ('constants.php');
+require_once ('../../validator.php');
 
 class characterController
 {
@@ -12,8 +13,8 @@ class characterController
     public $character;
 
     public function createCharacter(){
-        if ($this->characterName & $this->characterClass) {
-            characterModel::addCharacterToDB($this->characterName, $this->characterLVL, $this->characterClass);
+        if ($this->characterName) {
+            characterModel::addCharacterToDB($this->characterName, $this->characterLVL);
             return characterModel::$result;
         }
         else {
@@ -26,20 +27,28 @@ class characterController
     public function updateCharacter(){
         if ($this->characterID) {
             setlocale(LC_ALL, "ru_RU.UTF-8");
-            if (!preg_match("#^[^A-zА-я ]+$#",$this->characterName)) {
-                if (intval($this->characterLVL)>0) {
-                    characterModel::updateCharacterFromDB($this->characterName, $this->characterLVL, $this->characterClass);
-                    return characterModel::$result;
-                }
-                else {
+            $validator = new validator($this->characterName);
+            if (!$validator->error) {
+                if (!$validator->symbols && !$validator->number) {
+                    if (intval($this->characterLVL)>0) {
+                        characterModel::updateCharacterFromDB($this->characterName, $this->characterLVL);
+                        return characterModel::$result;
+                    }
+                    else {
+                        $this->character->result = false;
+                        $this->character->statusCode = STATUS_ERROR_LVL;
+                        $this->character->error = 'Уровень персонажа не может быть ниже 1';
+                    }
+                } else {
                     $this->character->result = false;
-                    $this->character->statusCode = STATUS_ERROR_LVL;
-                    $this->character->error = 'Уровень персонажа не может быть ниже 1';
+                    $this->character->statusCode = STATUS_ERROR_NAME;
+                    $this->character->error = 'Нельзя использовать цифры и спецсимволы в имени персонажа';
                 }
-            } else {
+            }
+            else {
                 $this->character->result = false;
-                $this->character->statusCode = STATUS_ERROR_NAME;
-                $this->character->error = 'Нельзя использовать цифры и спецсимволы в имени персонажа';
+                $this->character->statusCode = FATAL_ERROR;
+                $this->character->error = $validator->error;
             }
         }
         else {
