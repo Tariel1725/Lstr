@@ -35,15 +35,19 @@ class characterModel extends model
         $sql = 'SELECT * FROM '.$this->characterTable.' WHERE `id` = '.$this->ID;
         $stmt = $this->DB->query($sql);
         $character = $stmt->fetchAll();
-        $this->LVL = $character[0]['lvl'];
-        $this->STR = $character[0]['STR'];
-        $this->AGI = $character[0]['AGI'];
-        $this->CON = $character[0]['CON'];
-        $this->PER = $character[0]['PER'];
-        $this->INT = $character[0]['INL'];
-        $this->WIS = $character[0]['WIS'];
-        $this->LUC = $character[0]['LUC'];
-        $this->CHA = $character[0]['CHA'];
+        return $result = ['name'=>$character[0]['name'],
+                           'lvl'=>$character[0]['lvl'],
+                           'stats'=>[
+                                'STR'=>$character[0]['STR'],
+                                'AGI'=>$character[0]['AGI'],
+                                'CON'=>$character[0]['CON'],
+                                'PER'=>$character[0]['PER'],
+                                'INT'=>$character[0]['INT'],
+                                'WIS'=>$character[0]['WIS'],
+                                'LUC'=>$character[0]['LUC'],
+                                'CHA'=>$character[0]['CHA']
+                                    ]
+                          ];
     }
 
     public function LVLupCharacter($uppedStat, $addedClassID){

@@ -8,7 +8,6 @@ class characterClass extends model
 
 
     public function addClass(){
-
+        $sql = 'INSERT INTO '.$this->classTable.' () VALUES ('.')';
     }
-
 }
