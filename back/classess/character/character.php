@@ -52,8 +52,9 @@ class characterController
 
     public function getCharacterInfo(){
         if ($this->characterID) {
-            characterModel::selectCharacterFromDB();
-            return characterModel::$result;
+            $character = new characterModel();
+            $character->ID = $this->characterID;
+            return $character->characterInfo();
         }
         else {
             $this->character->result = false;
