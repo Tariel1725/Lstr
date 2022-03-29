@@ -42,7 +42,7 @@ class characterModel extends model
                                 'AGI'=>$character[0]['AGI'],
                                 'CON'=>$character[0]['CON'],
                                 'PER'=>$character[0]['PER'],
-                                'INT'=>$character[0]['INT'],
+                                'INT'=>$character[0]['INL'],
                                 'WIS'=>$character[0]['WIS'],
                                 'LUC'=>$character[0]['LUC'],
                                 'CHA'=>$character[0]['CHA']

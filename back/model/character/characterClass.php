@@ -4,10 +4,31 @@ class characterClass extends model
 {
     private $classTable = 'classes';
     private $classesSkills = '';
-    public $className;
 
+    public $ID;
+    public $className;
+    public $parentClass;
 
     public function addClass(){
-        $sql = 'INSERT INTO '.$this->classTable.' () VALUES ('.')';
+        if(is_array($this->parentClass)){
+            $sql = 'INSERT INTO '.$this->classTable.' (`name`, `parrentClass`) VALUES ('.$this->className.', `'.json_decode($this->parentClass).'`)';
+        }
+        else{
+            $sql = 'INSERT INTO '.$this->classTable.' (`name`) VALUES ('.$this->className.')';
+
+        }
+        $this->DB->query($sql);
+        return $this->DB->lastInsertId();
+    }
+
+    public function addSkillToClass($skillID){
+        $sql = 'INSERT INTO '.$this->classesSkills.' (`skillID`, `classID`) VALUES ('.$skillID.', '.$this->ID.')';
+        $this->DB->query($sql);
+        return $this->DB->lastInsertId();
+    }
+
+    public function removeSkillFromClass($skillID){
+        $sql = 'DELETE FROM '.$this->classesSkills.' WHERE `skillID` = '.$skillID.')';
+        $this->DB->query($sql);
     }
 }
