@@ -3,9 +3,10 @@
 class characterClass extends model
 {
     private $classTable = 'classes';
-    private $classesSkills = '';
+    private $classesSkills = 'classesskills';
 
     public $ID;
+    public $classLVL;
     public $className;
     public $parentClass;
 
@@ -22,7 +23,7 @@ class characterClass extends model
     }
 
     public function addSkillToClass($skillID){
-        $sql = 'INSERT INTO '.$this->classesSkills.' (`skillID`, `classID`) VALUES ('.$skillID.', '.$this->ID.')';
+        $sql = 'INSERT INTO '.$this->classesSkills.' (`skillID`, `classID`, `classLVL`) VALUES ('.$skillID.', '.$this->ID.', '.$this->classLVL.')';
         $this->DB->query($sql);
         return $this->DB->lastInsertId();
     }
