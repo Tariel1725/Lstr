@@ -1,6 +1,7 @@
 <?php
 
 require_once ('../../validator.php');
+require_once ('../../model/model.php');
 
 class itemsController
 {
@@ -13,7 +14,7 @@ class itemsController
 
     public function createItem() {
         if ($this->itemName) {
-            itemsModel::addItemToDB($this->itemName, $this->itemPrice, $this->itemType);
+            itemsModel::addItem($this->itemName, $this->itemPrice, $this->itemType);
             return itemsModel::$result;
         }
         else {

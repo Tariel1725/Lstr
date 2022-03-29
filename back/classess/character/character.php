@@ -7,12 +7,19 @@ require_once ('../../model/model.php');
 
 class characterController
 {
-    private $characterID = false;
-    private $characterName = false;
-    private $characterLVL = 1;
-    private $characterClass = false;
+    private $characterID;
+    private $characterName;
+    private $characterLVL;
+    private $characterClass;
     private $characterStatus;//Состояние здоровья, маны, перки, текущее кол-во опыта.
     public $character;
+
+    public function __construct() {
+        $this->characterLVL = 1;
+        $this->characterID = false;
+        $this->characterName = false;
+        $this->characterClass = false;
+    }
 
     public function createCharacter(){
         if ($this->characterName && $this->characterClass) {
@@ -34,7 +41,7 @@ class characterController
                 else {
                     $this->character->result = false;
                     $this->character->statusCode = STATUS_ERROR_NAME;
-                    $this->character->error = 'Нельзя использовать цифры и спецсимволы в имени персонажа';
+                    $this->character->error = 'Нельзя использовать цифры и спецсимволы';
                 }
             }
             else {
@@ -54,13 +61,17 @@ class characterController
         if ($this->characterID) {
             $character = new characterModel();
             $character->ID = $this->characterID;
-            return $character->characterInfo();
+            $this->character->data = $character->characterInfo();
+            $this->character->result = true;
+            $this->character->statusCode = STATUS_NO_ERROR;
+            $this->character->error = 'Выполнено успешно';
         }
         else {
             $this->character->result = false;
             $this->character->statusCode = STATUS_ERROR_ID;
             $this->character->error = 'Необходимо ввести ID персонажа';
         }
+        return $this->character;
     }
 
     public function deleteCharacter() {
